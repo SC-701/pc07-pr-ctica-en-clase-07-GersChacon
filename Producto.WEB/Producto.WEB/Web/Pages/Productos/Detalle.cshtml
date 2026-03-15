@@ -1,0 +1,80 @@
+@page
+@model Web.Pages.Productos.DetalleModel
+@{
+    ViewData["Title"] = "Detalle del Producto";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7 col-md-9">
+
+        <div class="d-flex align-items-center mb-4">
+            <a class="btn btn-ghost btn-sm me-3" asp-page="./Index">← Regresar</a>
+            <div>
+                <h2 class="mb-0 fw-bold">🔍 Detalle del Producto</h2>
+                <small style="color:var(--text-muted)">Información completa del registro</small>
+            </div>
+        </div>
+
+        @if (Model.ErrorApi != null)
+        {
+            <div class="alert-dark-danger d-flex align-items-center gap-2 p-3 mb-4">
+                <span>⛔</span>
+                <div><strong>Error de conexión</strong><br><small>@Model.ErrorApi</small></div>
+            </div>
+        }
+        else if (Model.producto != null)
+        {
+            <div class="card mb-3">
+                <div class="card-header accent-primary d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold">@Html.DisplayFor(m => m.producto.Nombre)</h5>
+                    <div class="d-flex gap-2">
+                        <span class="badge-custom">@Html.DisplayFor(m => m.producto.Categoria)</span>
+                        <span class="badge-custom" style="background:rgba(99,102,241,0.1)">@Html.DisplayFor(m => m.producto.SubCategoria)</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4" style="color:var(--text-muted);line-height:1.6">
+                        @Html.DisplayFor(m => m.producto.Descripcion)
+                    </p>
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-4">
+                            <div class="stat-box">
+                                <div class="stat-label">Precio CRC</div>
+                                <div class="stat-value" style="color:var(--success)">₡@Html.DisplayFor(m => m.producto.Precio)</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="stat-box">
+                                <div class="stat-label">Precio USD</div>
+                                <div class="stat-value" style="color:var(--primary)">$@Html.DisplayFor(m => m.producto.PrecioUSD)</div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="stat-box">
+                                <div class="stat-label">Stock</div>
+                                <div class="stat-value">
+                                    <span class="@(Model.producto.Stock > 10 ? "badge-custom badge-stock-ok" : "badge-custom badge-stock-low")">
+                                        @Html.DisplayFor(m => m.producto.Stock) uds
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="stat-box text-start">
+                        <span style="color:var(--text-muted);font-size:0.8rem;text-transform:uppercase;letter-spacing:.05em">Código de Barras</span>
+                        <div class="fw-bold mt-1" style="font-family:monospace;font-size:1.1rem;letter-spacing:.1em">
+                            @Html.DisplayFor(m => m.producto.CodigoBarras)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <a class="btn btn-warning-custom flex-grow-1" asp-page="./Editar" asp-route-id="@Model.producto.Id">
+                    ✏️ Editar Producto
+                </a>
+                <a class="btn btn-ghost" asp-page="./Index">Volver al listado</a>
+            </div>
+        }
+    </div>
+</div>

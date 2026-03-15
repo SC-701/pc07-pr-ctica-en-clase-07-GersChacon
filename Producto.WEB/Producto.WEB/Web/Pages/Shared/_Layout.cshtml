@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Productos</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Web.styles.css" asp-append-version="true" />
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --surface: #1e1e2e;
+            --surface2: #27273a;
+            --surface3: #313145;
+            --text: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #3f3f5a;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--surface);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        /* ── TOPBAR ── */
+        .topbar {
+            background: linear-gradient(90deg, var(--primary-dark), var(--primary));
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .topbar-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 0.03em;
+        }
+        .topbar-brand span {
+            background: rgba(255,255,255,0.2);
+            border-radius: 6px;
+            padding: 2px 8px;
+            margin-right: 6px;
+        }
+        .topbar-nav a {
+            color: rgba(255,255,255,0.85);
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .topbar-nav a:hover { color: #fff; }
+
+        /* ── PAGE WRAPPER ── */
+        .page-wrapper {
+            min-height: calc(100vh - 56px - 48px);
+            padding: 2rem 1.5rem;
+        }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+        }
+        .card-header {
+            border-bottom: 1px solid var(--border);
+            border-radius: 12px 12px 0 0 !important;
+            background: var(--surface3);
+            padding: 0.85rem 1.25rem;
+        }
+        .card-header.accent-primary { border-left: 4px solid var(--primary); }
+        .card-header.accent-success  { border-left: 4px solid var(--success); }
+        .card-header.accent-warning  { border-left: 4px solid var(--warning); }
+        .card-header.accent-danger   { border-left: 4px solid var(--danger); }
+        .card-footer {
+            background: var(--surface3);
+            border-top: 1px solid var(--border);
+            border-radius: 0 0 12px 12px !important;
+        }
+
+        /* ── FORM CONTROLS ── */
+        .form-control, .form-select {
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+        }
+        .form-control:focus, .form-select:focus {
+            background: var(--surface3);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.25);
+            color: var(--text);
+        }
+        .form-control::placeholder { color: var(--text-muted); }
+        .input-group-text {
+            background: var(--surface3);
+            border-color: var(--border);
+            color: var(--text-muted);
+        }
+        .form-label { color: var(--text-muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+
+        /* ── BUTTONS ── */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.5rem 1.25rem;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-primary-custom:hover { opacity: 0.9; color: #fff; transform: translateY(-1px); }
+        .btn-ghost {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-success-custom {
+            background: var(--success);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .btn-success-custom:hover { opacity: 0.88; color: #fff; }
+        .btn-warning-custom {
+            background: var(--warning);
+            color: #1e1e2e;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .btn-warning-custom:hover { opacity: 0.88; color: #1e1e2e; }
+        .btn-danger-custom {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .btn-danger-custom:hover { opacity: 0.88; color: #fff; }
+
+        /* ── BADGES ── */
+        .badge-custom {
+            background: rgba(99,102,241,0.2);
+            color: var(--primary);
+            border: 1px solid rgba(99,102,241,0.3);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            padding: 3px 10px;
+        }
+        .badge-stock-ok  { background: rgba(16,185,129,0.15); color: var(--success); border-color: rgba(16,185,129,0.3); }
+        .badge-stock-low { background: rgba(245,158,11,0.15); color: var(--warning); border-color: rgba(245,158,11,0.3); }
+
+        /* ── STAT BOXES ── */
+        .stat-box {
+            background: var(--surface3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-box .stat-label { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .stat-box .stat-value { font-size: 1.3rem; font-weight: 700; margin-top: 2px; }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-header h2 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        .page-header small {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ── ALERT ── */
+        .alert-dark-warning {
+            background: rgba(245,158,11,0.12);
+            border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 8px;
+            color: var(--warning);
+            font-size: 0.88rem;
+        }
+        .alert-dark-danger {
+            background: rgba(239,68,68,0.12);
+            border: 1px solid rgba(239,68,68,0.3);
+            border-radius: 8px;
+            color: #fca5a5;
+            font-size: 0.88rem;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--surface2);
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text-muted);
+        }
+        .empty-state .empty-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <a class="topbar-brand" asp-area="" asp-page="/Index">
+            <span>📦</span>GestiónProductos
+        </a>
+        <nav class="topbar-nav">
+            <a asp-area="" asp-page="/Index">Inicio</a>
+            <a asp-area="" asp-page="/Productos/Index">Productos</a>
+            <a asp-area="" asp-page="/Privacy">Privacidad</a>
+        </nav>
+    </header>
+
+    <div class="page-wrapper container-fluid">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer>
+        <div class="container-fluid d-flex justify-content-between">
+            <span>&copy; 2026 &mdash; GestiónProductos</span>
+            <a asp-area="" asp-page="/Privacy" style="color:var(--text-muted)">Privacidad</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
