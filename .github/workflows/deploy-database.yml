@@ -25,6 +25,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
   build-and-deploy-database:
@@ -43,6 +44,9 @@ jobs:
 
       - name: Restore NuGet packages
         run: nuget restore "Seguridad/Seguridad.API/Seguridad.sln"
+
+      - name: Agregar paquetes Source privado
+        run: nuget sources add -name "Paquetes" -Source "https://nuget.pkg.github.com/SC-701/index.json"
 
       - name: Build Database Project
         run: |
