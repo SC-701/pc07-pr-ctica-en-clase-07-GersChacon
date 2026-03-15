@@ -1,26 +1,21 @@
 name: Deploy Seguridad API to Azure
-
 env:
   AZURE_WEBAPP_NAME:         apiseguridadvehiculogerschacon
   AZURE_WEBAPP_PACKAGE_PATH: './Seguridad/Seguridad.API/API'
   DOTNET_VERSION:            '8.0'
-
 on:
   push:
     branches: [ "main" ]
     paths:
       - 'Seguridad/Seguridad.API/**'
   workflow_dispatch:
-
 permissions:
   contents: read
-
 jobs:
   build-and-deploy:
     runs-on: windows-latest
     environment:
       name: 'Production-Database'
-
     steps:
       - uses: actions/checkout@v4
 
@@ -30,13 +25,13 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Configurar NuGet feed privado
-        run: |
-          dotnet nuget add source \
-            "https://nuget.pkg.github.com/SC-701/index.json" 
-            --name "Paquetes" \
-            --username "${{ github.actor }}" \
-            --password "${{ secrets.PAQUETESTOKEN }}" \
-            --store-password-in-clear-text
+        run: >
+          dotnet nuget add source
+          "https://nuget.pkg.github.com/SC-701/index.json"
+          --name "Paquetes"
+          --username "${{ github.actor }}"
+          --password "${{ secrets.PAQUETESTOKEN }}"
+          --store-password-in-clear-text
 
       - name: Restaurar dependencias
         run: |
@@ -55,10 +50,10 @@ jobs:
 
       - name: Publicar (dotnet publish)
         run: |
-          cd "Ejemplos/Seguridad/Seguridad.API"
-          dotnet publish "API/API.csproj" \
-            --configuration Release \
-            --no-build \
+          cd "Seguridad/Seguridad.API"
+          dotnet publish "API/API.csproj" `
+            --configuration Release `
+            --no-build `
             --output ./publish
 
       - name: Deploy a Azure Web App
