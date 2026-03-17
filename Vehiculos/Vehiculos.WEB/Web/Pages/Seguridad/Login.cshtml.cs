@@ -1,7 +1,7 @@
 ﻿// Login.cshtml.cs
 using Abstracciones.Interfaces.Reglas;
 using Abstracciones.Modelos;
-using Abstracciones.Seguridad;
+using Abstracciones.Modelos.Seguridad;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity.Data;
@@ -20,7 +20,7 @@ namespace Web.Pages.Seguridad
         [BindProperty]
         public LoginRequest loginInfo { get; set; } = default!;
         [BindProperty]
-        public Abstracciones.Seguridad.Token token { get; set; } = default!;
+        public Abstracciones.Modelos.Seguridad.Token token { get; set; } = default!;
         private IConfiguracion _configuracion;
 
         public LoginModel(IConfiguracion configuracion)
@@ -52,7 +52,7 @@ namespace Web.Pages.Seguridad
                 respuesta.EnsureSuccessStatusCode();
 
                 var opciones = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                token = JsonSerializer.Deserialize<Abstracciones.Seguridad.Token>(
+                token = JsonSerializer.Deserialize<Abstracciones.Modelos.Seguridad.Token>(
                     respuesta.Content.ReadAsStringAsync().Result, opciones);
 
                 if (token.ValidacionExitosa)
